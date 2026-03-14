@@ -1,4 +1,4 @@
-
+const { db, Book } = require('./setup');
 
 
 // Sample book data
@@ -86,3 +86,23 @@ const sampleBooks = [
 ];
 
 // Seed database using Sequelize model
+async function seedDatabase() {
+    try {
+    	await db.authenticate();
+    	console.log('Connected to database for seeding.');
+    
+    	// Use bulkCreate to insert multiple records
+    	await Book.bulkCreate(sampleBooks);
+    	console.log('Sample books inserted successfully.');
+    
+    	// Query books using model methods
+    	const allBooks = await Book.findAll();
+    	console.log('Books in database:', allBooks.length);
+    
+        await db.close();
+    } catch (error) {
+        console.error('Error seeding database:', error);
+    }
+}
+
+seedDatabase();
